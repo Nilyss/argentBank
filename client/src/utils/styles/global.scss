@@ -1,0 +1,38 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+/* reset.scss */
+/* Box sizing rules & remove default padding and margin */
+html,
+body,
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Set core body defaults */
+body {
+  scroll-behavior: smooth;
+  cursor: default;
+  color: vars.$primaryFontColor;
+  min-height: 100dvh;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+/* Make images easier to work with */
+img {
+  max-width: 100%;
+  display: block;
+}

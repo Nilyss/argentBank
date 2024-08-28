@@ -1,0 +1,43 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+#banner {
+  position: relative;
+}
+
+#banner figure {
+  overflow: hidden;
+  height: 400px;
+}
+
+#banner figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 0 33%;
+}
+
+#banner article {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 375px;
+  margin: 2rem;
+  padding: 2rem;
+  background: #ffffff;
+}
+
+#banner article h2 {
+  @include mixins.screenReaderOnly;
+}
+
+#banner article li:not(:last-child) {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+#banner article li:last-child {
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-top: 1em;
+}

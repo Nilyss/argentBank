@@ -1,0 +1,40 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+header nav {
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header figure {
+  width: 200px;
+}
+
+header figure img {
+  width: 100%;
+}
+
+header nav h1 {
+  @include mixins.screenReaderOnly;
+}
+
+header nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  color: vars.$primaryFontColor;
+  text-decoration: none;
+
+  &:hover {
+    .signInBtn {
+      text-decoration: underline;
+    }
+  }
+}

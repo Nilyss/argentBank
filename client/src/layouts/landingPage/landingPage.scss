@@ -1,0 +1,12 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+#features {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#features h2 {
+  @include mixins.screenReaderOnly;
+}

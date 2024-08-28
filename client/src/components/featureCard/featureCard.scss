@@ -1,0 +1,49 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+#featureCard {
+  width: 440px;
+  height: 383px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 2.5rem;
+}
+
+#featureCard .iconContainer {
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 10px solid #00bc77;
+  padding: 1em;
+  margin-bottom: 1.5rem;
+}
+
+#featureCard figure {
+  width: 100px;
+  height: 100px;
+}
+
+#featureCard figure img {
+  width: 100%;
+}
+
+#featureCard .content {
+  text-align: center;
+}
+
+#featureCard h3 {
+  color: #222;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+#featureCard p {
+  width: 100%;
+  text-align: center;
+}
