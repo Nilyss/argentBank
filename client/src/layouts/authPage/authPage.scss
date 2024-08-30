@@ -3,6 +3,8 @@
 
 #authPage {
   background: vars.$homeBackgroundColor;
-  min-height: 85vh;
+  height: 80vh;
   color: white;
+  display: flex;
+  flex-flow: column;
 }

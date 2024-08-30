@@ -1,2 +1,83 @@
 @use '../../utils/styles/mixins' as mixins;
 @use '../../utils/styles/variables' as vars;
+
+#signForm {
+  background: #ffffff;
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 2rem;
+}
+
+#signForm .formHeader {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#signForm h1 {
+  color: vars.$primaryFontColor;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+#signForm .formBody {
+  display: flex;
+  flex-flow: column;
+  gap: 1rem;
+}
+
+#signForm .inputWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#signForm .rememberWrapper {
+  display: flex;
+  align-items: center;
+}
+
+#signForm label:not(:last-child) {
+  color: vars.$primaryFontColor;
+  font-weight: 700;
+}
+
+#signForm label:last-child {
+  color: vars.$primaryFontColor;
+  margin-left: .25rem;
+}
+
+#signForm input[type='email'],
+#signForm input[type='password'] {
+  padding: 5px;
+  font-size: 1.2rem;
+}
+
+#signForm input[type='checkbox'] {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+}
+
+#signForm footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#signForm button {
+  width: 100%;
+  background: #00bc77;
+  border-color: #00bc77;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 8px;
+  color: #fff;
+  margin-top: 1rem;
+  border: none; // firefox fix
+  text-decoration: underline;
+  cursor: pointer;
+}
