@@ -8,3 +8,7 @@
   display: flex;
   flex-flow: column;
 }
+
+.toggleSignForm {
+  visibility: hidden; // hide toggle button according to the designs
+}

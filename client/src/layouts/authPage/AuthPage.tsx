@@ -20,6 +20,10 @@ export default function AuthPage(): ReactElement {
   return (
     <main id="authPage">
       <SignForm isSignUp={isSignUp} />
+      {/* temporary hide toggle button in css according to the designs */}
+      <button className={'toggleSignForm'} onClick={toggleSignForm}>
+        {isSignUp ? 'Sign In' : 'Sign Up'}
+      </button>
     </main>
   )
 }
