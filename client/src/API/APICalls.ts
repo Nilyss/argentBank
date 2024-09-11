@@ -14,9 +14,7 @@ export interface APIResponse<T> {
 export class APICalls implements IAPICalls {
   baseUrl: string
   constructor() {
-    this.baseUrl = isOnProduction
-      ? ''
-      : 'http://localhost:3001/api/v1/'
+    this.baseUrl = isOnProduction ? '' : 'http://localhost:3001/api/v1/'
   }
 
   async getRequest<T>(endpoint: string): Promise<T> {
@@ -42,7 +40,11 @@ export class APICalls implements IAPICalls {
       // credentials: 'include',
     })
     if (!response.ok) {
-      const error: Error = new Error('Network response was not ok')
+      const errorData = await response.json()
+      const error: Error = new Error(
+        (errorData.message && response.status.toString()) ||
+          'Response was not OK',
+      )
       console.error(error)
       throw error
     }

@@ -2,16 +2,18 @@
 import { APICalls } from '../APICalls'
 
 // types
-import { IUserCredentials } from '../types/userTypes'
-import { IUser } from '../types/userTypes'
+import { ILoginResponse } from '../types/userTypes'
 
 export class UserService extends APICalls {
   constructor() {
     super()
   }
 
-  async login(userCredentials: IUserCredentials) {
-    const res = await this.postRequest<IUser>('/user/login', userCredentials)
+  async login(userCredentials: { email: string; password: string }) {
+    const res = await this.postRequest<ILoginResponse>(
+      'user/login',
+      userCredentials,
+    )
     return res.data
   }
 

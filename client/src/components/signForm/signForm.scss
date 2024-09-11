@@ -47,7 +47,7 @@
 
 #signForm label:last-child {
   color: vars.$primaryFontColor;
-  margin-left: .25rem;
+  margin-left: 0.25rem;
 }
 
 #signForm input[type='email'],
@@ -80,4 +80,10 @@
   border: none; // firefox fix
   text-decoration: underline;
   cursor: pointer;
+}
+
+#signForm .error {
+  text-align: center;
+  color: crimson;
+  margin: 1rem 0;
 }
