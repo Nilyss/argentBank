@@ -1,12 +1,19 @@
 export interface ILoginResponse {
   body: {
-    user: IUser
     token: string
+    profile: IProfile
   }
 }
 
-export interface IUser {
+export interface IProfile {
   id: string
-  name: string
   email: string
+  firstName: string
+  lastName: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface IProfileResponse {
+  body: IProfile
 }

@@ -24,7 +24,9 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
   const [remember, setRemember] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
-  const { loading, error } = useSelector((state: RootState) => state.user)
+  const { loading, error } = useSelector(
+    (state: RootState) => state.user,
+  )
 
   useEffect(() => {
     if (error) {
@@ -42,10 +44,10 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    dispatch(loginUser({ email, password, remember }))
+    await dispatch(loginUser({ email, password, remember }))
 
     if (!remember) localStorage.removeItem('authToken')
   }

@@ -3,11 +3,11 @@ import { UserService } from '../../services/User.service.ts'
 const userService = new UserService()
 
 // types
-import { ILoginResponse } from '../../types/userTypes'
+import { ILoginResponse, IProfile } from '../../types/userTypes'
 
 // initial State type
 export interface IUserState {
-  user: ILoginResponse['body']['user'] | null
+  profile: IProfile | null
   isAuthenticated: boolean
   token: string | null
   loading: boolean
@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >('user/login', async ({ email, password, remember }, thunkAPI) => {
   try {
-    // force loading to avoid flashing content
+    // force loading to avoid flashing content if the fetch is too fast
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     const res = await userService.login({ email, password })
@@ -29,7 +29,9 @@ export const loginUser = createAsyncThunk<
       localStorage.setItem('authToken', res.body.token)
     }
 
-    return res
+    const profile = await userService.getProfile(res.body.token)
+
+    return { body: { token: res.body.token, profile: profile } }
   } catch (err) {
     const error = err as { response?: { data?: string }; message?: string }
 
@@ -42,20 +44,20 @@ export const loginUser = createAsyncThunk<
 
 // Initial State
 const initialState: IUserState = {
-  user: null,
+  profile: null,
   isAuthenticated: false,
   token: localStorage.getItem('authToken'),
   loading: false,
   error: null,
 }
 
-// User Slice creation with reducer and extra reducers
+// User Slice creation with reducer and extra reducers (store)
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = null
+      state.profile = null
       state.isAuthenticated = false
       state.token = null
       localStorage.removeItem('authToken')
@@ -75,8 +77,8 @@ const userSlice = createSlice({
         (state, action: PayloadAction<ILoginResponse>) => {
           state.loading = false
           state.isAuthenticated = true
-          state.user = action.payload.body.user
           state.token = action.payload.body.token
+          state.profile = action.payload.body.profile
         },
       )
       .addCase(loginUser.rejected, (state, action) => {

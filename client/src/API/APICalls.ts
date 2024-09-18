@@ -30,11 +30,13 @@ export class APICalls implements IAPICalls {
   async postRequest<T>(
     endpoint: string,
     body: object,
+    headers?: object,
   ): Promise<APIResponse<T>> {
     const response: Response = await fetch(this.baseUrl + endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
       body: JSON.stringify(body),
       // credentials: 'include',

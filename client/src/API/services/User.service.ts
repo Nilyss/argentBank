@@ -2,7 +2,7 @@
 import { APICalls } from '../APICalls'
 
 // types
-import { ILoginResponse } from '../types/userTypes'
+import { ILoginResponse, IProfile, IProfileResponse } from '../types/userTypes'
 
 export class UserService extends APICalls {
   constructor() {
@@ -19,7 +19,14 @@ export class UserService extends APICalls {
 
   // async signUp
 
-  // async createProfile
+  async getProfile(userToken: string): Promise<IProfile> {
+    const res = await this.postRequest<IProfileResponse>(
+      'user/profile',
+      {},
+      { Authorization: `Bearer ${userToken}` },
+    )
+    return res.data.body
+  }
 
   // async updateProfile
 }
