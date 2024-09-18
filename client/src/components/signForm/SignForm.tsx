@@ -7,6 +7,7 @@ interface ISignFormProps {
   isSignUp: boolean
 }
 import { RootState, AppDispatch } from '../../API/redux/store/store'
+import { resetError } from '../../API/redux/reducers/userSlice'
 
 // hooks | libraries
 import { FaUserCircle } from 'react-icons/fa'
@@ -25,7 +26,6 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
   const { loading, error } = useSelector((state: RootState) => state.user)
 
-  // TODO : VIDER L'ERROR MESSAGE (ERROR EST STATE DONC CONDITION KO)
   useEffect(() => {
     if (error) {
       handleError(error)
@@ -90,7 +90,10 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
                   type={'email'}
                   id={'email'}
                   name={'email'}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    if (error) dispatch(resetError())
+                    setEmail(e.target.value)
+                  }}
                 />
               </div>
               <div className={'inputWrapper'}>
@@ -99,7 +102,10 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
                   type={'password'}
                   id={'password'}
                   name={'password'}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    if (error) dispatch(resetError())
+                    setPassword(e.target.value)
+                  }}
                 />
               </div>
               <div className={'rememberWrapper'}>
