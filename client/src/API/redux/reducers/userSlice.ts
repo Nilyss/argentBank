@@ -3,7 +3,11 @@ import { UserService } from '../../services/User.service.ts'
 const userService = new UserService()
 
 // types
-import { ILoginResponse, IProfile } from '../../types/userTypes'
+import {
+  ICreateUserResponse,
+  ILoginResponse,
+  IProfile,
+} from '../../types/userTypes'
 
 // initial State type
 export interface IUserState {
@@ -12,7 +16,37 @@ export interface IUserState {
   token: string | null
   loading: boolean
   error: string | null
+  id?: string | null
+  email?: string | null
 }
+
+export const createUser = createAsyncThunk<
+  ICreateUserResponse,
+  { email: string; password: string; firstName: string; lastName: string },
+  { rejectValue: string }
+>('user/signup', async ({ email, password, firstName, lastName }, thunkAPI) => {
+  try {
+    // force loading to avoid flashing content if the fetch is too fast
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    const res = await userService.signUp({
+      email,
+      password,
+      firstName,
+      lastName,
+    })
+
+    return { body: { id: res.body.id, email: res.body.email } }
+  } catch (err) {
+    const error = err as { response?: { data?: string }; message?: string }
+    const errorMessage =
+      error.response?.data ||
+      error.message ||
+      `Erreur lors de la creation d'utilisateur`
+
+    return thunkAPI.rejectWithValue(errorMessage)
+  }
+})
 
 export const loginUser = createAsyncThunk<
   ILoginResponse,
@@ -68,6 +102,26 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      // cases create new user
+      .addCase(createUser.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(
+        createUser.fulfilled,
+        (state, action: PayloadAction<ICreateUserResponse>) => {
+          state.loading = false
+          state.id = action.payload.body.id
+          state.email = action.payload.body.email
+        },
+      )
+      .addCase(createUser.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload || `Erreur interne`
+      })
+
+      // case login
       .addCase(loginUser.pending, (state) => {
         state.loading = true
         state.error = null

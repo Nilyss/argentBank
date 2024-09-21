@@ -2,12 +2,13 @@
 import './signForm.scss'
 
 // types
-import { ReactElement, FormEvent } from 'react'
+import { ReactElement, MouseEvent } from 'react'
 interface ISignFormProps {
   isSignUp: boolean
+  toggleSignForm: () => void
 }
 import { RootState, AppDispatch } from '../../API/redux/store/store'
-import { resetError } from '../../API/redux/reducers/userSlice'
+import { createUser, resetError } from '../../API/redux/reducers/userSlice'
 
 // hooks | libraries
 import { FaUserCircle } from 'react-icons/fa'
@@ -18,15 +19,18 @@ import { useDispatch, useSelector } from 'react-redux'
 // components
 import Loader from '../loader/Loader'
 
-export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
+export default function SignForm({
+  isSignUp,
+  toggleSignForm,
+}: ISignFormProps): ReactElement {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
   const [remember, setRemember] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
-  const { loading, error } = useSelector(
-    (state: RootState) => state.user,
-  )
+  const { loading, error } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     if (error) {
@@ -44,7 +48,20 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
     }
   }
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSignUpSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    await dispatch(
+      createUser({
+        email,
+        firstName,
+        lastName,
+        password,
+      }),
+    )
+  }
+
+  const handleSignInSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
     await dispatch(loginUser({ email, password, remember }))
@@ -52,87 +69,118 @@ export default function SignForm({ isSignUp }: ISignFormProps): ReactElement {
     if (!remember) localStorage.removeItem('authToken')
   }
 
-  const signUpForm = (): ReactElement => {
-    return (
-      <>
-        {loading ? (
-          <Loader />
-        ) : (
-          <form
-            id={'signForm'}
-            className={isSignUp ? 'signUpForm' : 'signInForm'}
-          >
-            Sign Up Form
-          </form>
-        )}
-      </>
-    )
-  }
+  return (
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <form
+          id={'signForm'}
+          className={isSignUp ? 'signUpForm' : 'signInForm'}
+        >
+          <div className={'formHeader'}>
+            <FaUserCircle fill={'#000000'} size={'16'} />
+            <h1>{isSignUp ? 'Sign Up' : 'Sign In'}</h1>
+          </div>
 
-  const signInForm = (): ReactElement => {
-    return (
-      <>
-        {loading ? (
-          <Loader />
-        ) : (
-          <form
-            id={'signForm'}
-            className={isSignUp ? 'signUpForm' : 'signInForm'}
-            onSubmit={handleSubmit}
-          >
-            <div className={'formHeader'}>
-              <FaUserCircle fill={'#000000'} size={'16'} />
-              <h1>Sign In</h1>
+          <div className={'formBody'}>
+            <div className={'inputWrapper'}>
+              <label htmlFor={'email'}>
+                {isSignUp ? `Email adresse` : `Username`}
+              </label>
+              <input
+                type={'email'}
+                id={'email'}
+                name={'email'}
+                onChange={(e) => {
+                  if (error) dispatch(resetError())
+                  setEmail(e.target.value)
+                }}
+              />
             </div>
 
-            <div className={'formBody'}>
-              <div className={'inputWrapper'}>
-                <label htmlFor={'email'}>Username</label>
-                <input
-                  type={'email'}
-                  id={'email'}
-                  name={'email'}
-                  onChange={(e) => {
-                    if (error) dispatch(resetError())
-                    setEmail(e.target.value)
-                  }}
-                />
-              </div>
-              <div className={'inputWrapper'}>
-                <label htmlFor={'password'}>Password</label>
-                <input
-                  type={'password'}
-                  id={'password'}
-                  name={'password'}
-                  onChange={(e) => {
-                    if (error) dispatch(resetError())
-                    setPassword(e.target.value)
-                  }}
-                />
-              </div>
-              <div className={'rememberWrapper'}>
-                <input
-                  type={'checkbox'}
-                  id={'remember'}
-                  name={'remember'}
-                  onChange={(e) => setRemember(e.target.checked)}
-                />
-                <label htmlFor={'remember'}>Remember me</label>
-              </div>
+            {isSignUp && (
+              <>
+                <div className={'inputWrapper'}>
+                  <label htmlFor={'firstName'}>First name</label>
+                  <input
+                    type={'text'}
+                    id={'firstName'}
+                    name={'firstName'}
+                    onChange={(e) => {
+                      if (error) dispatch(resetError())
+                      setFirstName(e.target.value)
+                    }}
+                  />
+                </div>
+                <div className={'inputWrapper'}>
+                  <label htmlFor={'lastName'}>Last name</label>
+                  <input
+                    type={'text'}
+                    id={'lastName'}
+                    name={'lastName'}
+                    onChange={(e) => {
+                      if (error) dispatch(resetError())
+                      setLastName(e.target.value)
+                    }}
+                  />
+                </div>
+              </>
+            )}
+
+            <div className={'inputWrapper'}>
+              <label htmlFor={'password'}>Password</label>
+              <input
+                type={'password'}
+                id={'password'}
+                name={'password'}
+                onChange={(e) => {
+                  if (error) dispatch(resetError())
+                  setPassword(e.target.value)
+                }}
+              />
             </div>
 
-            {error && <p className={'error'}>{errorMessage}</p>}
+            {!isSignUp && (
+              <>
+                <div className={'rememberWrapper'}>
+                  <input
+                    type={'checkbox'}
+                    id={'remember'}
+                    name={'remember'}
+                    onChange={(e) => setRemember(e.target.checked)}
+                  />
+                  <label htmlFor={'remember'}>Remember me</label>
+                </div>
+              </>
+            )}
+          </div>
 
-            <div className={'formFooter'}>
-              <button className={'signInButton'} type={'submit'}>
-                Sign In
-              </button>
-            </div>
-          </form>
-        )}
-      </>
-    )
-  }
+          {error && <p className={'error'}>{errorMessage}</p>}
 
-  return isSignUp ? signUpForm() : signInForm()
+          <div className={'formFooter'}>
+            <button
+              className={'signInButton'}
+              onClick={isSignUp ? handleSignUpSubmit : handleSignInSubmit}
+            >
+              {isSignUp ? `Sign Up` : `Sign In`}
+            </button>
+            <p>
+              {isSignUp ? (
+                <>
+                  Already have an account? Sign in{' '}
+                  <span onClick={toggleSignForm}>here</span>.
+                </>
+              ) : (
+                <>
+                  Don’t have an account yet? Create{' '}
+                  <span onClick={toggleSignForm}>here</span>.
+                </>
+              )}
+            </p>
+          </div>
+        </form>
+      )}
+    </>
+  )
 }

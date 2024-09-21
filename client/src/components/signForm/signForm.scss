@@ -51,7 +51,8 @@
 }
 
 #signForm input[type='email'],
-#signForm input[type='password'] {
+#signForm input[type='password'],
+#signForm input[type='text'] {
   padding: 5px;
   font-size: 1.2rem;
 }
@@ -79,6 +80,19 @@
   margin-top: 1rem;
   border: none; // firefox fix
   text-decoration: underline;
+  cursor: pointer;
+}
+
+#signForm .formFooter p {
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: .5rem;
+  margin-bottom: -0.5rem;
+  color: vars.$primaryFontColor;
+}
+
+#signForm .formFooter p span {
+  color: #388ef5;
   cursor: pointer;
 }
 

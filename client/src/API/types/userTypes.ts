@@ -1,3 +1,10 @@
+export interface ICreateUserResponse {
+  body: {
+    id: string
+    email: string
+  }
+}
+
 export interface ILoginResponse {
   body: {
     token: string
