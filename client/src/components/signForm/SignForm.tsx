@@ -16,7 +16,12 @@ import { useNavigate } from 'react-router-dom'
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, AppDispatch } from '../../API/redux/store/store'
-import { createUser, resetError, loginUser } from '../../API/redux/reducers/userSlice'
+import {
+  createUser,
+  resetError,
+  loginUser,
+  getProfile,
+} from '../../API/redux/reducers/userSlice'
 
 // components
 import Loader from '../loader/Loader'
@@ -36,7 +41,9 @@ export default function SignForm({
   const navigate = useNavigate()
 
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
-  const { loading, error, id, isAuthenticated } = useSelector((state: RootState) => state.user)
+  const { loading, error, id, isAuthenticated } = useSelector(
+    (state: RootState) => state.user,
+  )
 
   const handleError = (error: string) => {
     if (isSignUp) {
@@ -57,7 +64,7 @@ export default function SignForm({
   const handleSignUpSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    await dispatch(
+    const createUserAction = await dispatch(
       createUser({
         email,
         firstName,
@@ -65,14 +72,34 @@ export default function SignForm({
         password,
       }),
     )
+
+    if (createUserAction.meta.requestStatus === 'fulfilled') {
+      setAccountCreatedMessage('Account created, please sign in')
+      toggleSignForm()
+    }
   }
 
   const handleSignInSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    await dispatch(loginUser({ email, password, remember }))
+    const loginAction = await dispatch(loginUser({ email, password, remember }))
 
-    if (!remember) localStorage.removeItem('authToken')
+    if (
+      loginAction.meta.requestStatus === 'fulfilled' &&
+      typeof loginAction.payload !== 'string'
+    ) {
+      const token = loginAction.payload!.body.token
+
+      if (!remember) localStorage.removeItem('authToken')
+
+      await dispatch(getProfile({ token }))
+
+      if (isAuthenticated) {
+        navigate('/home')
+      }
+    } else {
+      console.error('Login failed')
+    }
   }
 
   useEffect(() => {
@@ -80,8 +107,6 @@ export default function SignForm({
       handleError(error)
     } else {
       setErrorMessage('')
-      setAccountCreatedMessage('Account created, please sign in')
-      toggleSignForm()
     }
   }, [error, setEmail, id])
 
@@ -89,7 +114,7 @@ export default function SignForm({
     if (isAuthenticated) {
       navigate('/home')
     }
-  }, [isAuthenticated, navigate])
+  }, [isAuthenticated])
 
   return (
     <>

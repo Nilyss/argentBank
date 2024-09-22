@@ -7,19 +7,12 @@ import {
   ILoginResponse,
   IProfile,
   IProfileResponse,
+  IProfileUpdateResponse,
 } from '../types/userTypes'
 
 export class UserService extends APICalls {
   constructor() {
     super()
-  }
-
-  async login(userCredentials: { email: string; password: string }) {
-    const res = await this.postRequest<ILoginResponse>(
-      'user/login',
-      userCredentials,
-    )
-    return res.data
   }
 
   async signUp(newUser: {
@@ -35,6 +28,14 @@ export class UserService extends APICalls {
     return res.data
   }
 
+  async login(userCredentials: { email: string; password: string }) {
+    const res = await this.postRequest<ILoginResponse>(
+      'user/login',
+      userCredentials,
+    )
+    return res.data
+  }
+
   async getProfile(userToken: string): Promise<IProfile> {
     const res = await this.postRequest<IProfileResponse>(
       'user/profile',
@@ -44,5 +45,19 @@ export class UserService extends APICalls {
     return res.data.body
   }
 
-  // async updateProfile
+  async updateProfile(
+    userToken: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<IProfileUpdateResponse> {
+    const res = await this.putRequest<IProfileUpdateResponse>(
+      'user/profile',
+      {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      { Authorization: `Bearer ${userToken}` },
+    )
+    return res.data
+  }
 }

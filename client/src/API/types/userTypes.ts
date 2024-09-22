@@ -8,7 +8,6 @@ export interface ICreateUserResponse {
 export interface ILoginResponse {
   body: {
     token: string
-    profile: IProfile
   }
 }
 
@@ -23,4 +22,11 @@ export interface IProfile {
 
 export interface IProfileResponse {
   body: IProfile
+}
+
+export interface IProfileUpdateResponse {
+  body: {
+    id: string
+    email: string
+  }
 }

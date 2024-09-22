@@ -7,6 +7,8 @@ import {
   ICreateUserResponse,
   ILoginResponse,
   IProfile,
+  IProfileResponse,
+  IProfileUpdateResponse,
 } from '../../types/userTypes'
 
 // initial State type
@@ -26,9 +28,6 @@ export const createUser = createAsyncThunk<
   { rejectValue: string }
 >('user/signup', async ({ email, password, firstName, lastName }, thunkAPI) => {
   try {
-    // force loading to avoid flashing content if the fetch is too fast
-    await new Promise((resolve) => setTimeout(resolve, 500))
-
     const res = await userService.signUp({
       email,
       password,
@@ -54,18 +53,54 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >('user/login', async ({ email, password, remember }, thunkAPI) => {
   try {
-    // force loading to avoid flashing content if the fetch is too fast
-    await new Promise((resolve) => setTimeout(resolve, 500))
-
     const res = await userService.login({ email, password })
 
     if (remember) {
       localStorage.setItem('authToken', res.body.token)
     }
 
-    const profile = await userService.getProfile(res.body.token)
+    return { body: { token: res.body.token } }
 
-    return { body: { token: res.body.token, profile: profile } }
+  } catch (err) {
+    const error = err as { response?: { data?: string }; message?: string }
+
+    const errorMessage =
+      error.response?.data || error.message || 'Erreur lors de la connexion'
+
+    return thunkAPI.rejectWithValue(errorMessage)
+  }
+})
+
+export const getProfile = createAsyncThunk<
+  IProfileResponse,
+  { token: string },
+  { rejectValue: string }
+>('user/profile', async ({ token }, thunkAPI) => {
+  try {
+    const profile = await userService.getProfile(token)
+
+    return { body: profile }
+
+  } catch (err) {
+    const error = err as { response?: { data?: string }; message?: string }
+
+    const errorMessage =
+      error.response?.data || error.message || 'Erreur lors de la connexion'
+
+    return thunkAPI.rejectWithValue(errorMessage)
+  }
+})
+
+export const updateProfile = createAsyncThunk<
+  IProfileUpdateResponse,
+  { token: string; firstName: string; lastName: string },
+  { rejectValue: string }
+>('user/updateProfile', async ({ token, firstName, lastName }, thunkAPI) => {
+  try {
+    const res = await userService.updateProfile(token, firstName, lastName)
+
+    return { body: { id: res.body.id, email: res.body.email } }
+
   } catch (err) {
     const error = err as { response?: { data?: string }; message?: string }
 
@@ -130,12 +165,50 @@ const userSlice = createSlice({
         loginUser.fulfilled,
         (state, action: PayloadAction<ILoginResponse>) => {
           state.loading = false
-          state.isAuthenticated = true
+          state.isAuthenticated = false
           state.token = action.payload.body.token
-          state.profile = action.payload.body.profile
         },
       )
       .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false
+        state.isAuthenticated = false
+        state.error = action.payload || 'Erreur interne'
+      })
+
+      // case get profile
+      .addCase(getProfile.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(
+        getProfile.fulfilled,
+        (state, action: PayloadAction<IProfileResponse>) => {
+          state.loading = false
+          state.isAuthenticated = true
+          state.profile = action.payload.body
+        },
+      )
+      .addCase(getProfile.rejected, (state, action) => {
+        state.loading = false
+        state.isAuthenticated = false
+        state.error = action.payload || 'Erreur interne'
+      })
+
+      // case update profile
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(
+        updateProfile.fulfilled,
+        (state, action: PayloadAction<IProfileUpdateResponse>) => {
+          state.loading = false
+          state.isAuthenticated = true
+          state.id = action.payload.body.id
+          state.email = action.payload.body.email
+        },
+      )
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false
         state.isAuthenticated = false
         state.error = action.payload || 'Erreur interne'
