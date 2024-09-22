@@ -22,7 +22,6 @@ export class UserService extends APICalls {
     return res.data
   }
 
-  // TODO: CREATE A NEW USER
   async signUp(newUser: {
     email: string
     password: string

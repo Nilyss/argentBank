@@ -28,23 +28,24 @@ export default function SignForm({
   const [firstName, setFirstName] = useState<string>('')
   const [lastName, setLastName] = useState<string>('')
   const [remember, setRemember] = useState<boolean>(false)
+  const [accountCreatedMessage, setAccountCreatedMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
-  const { loading, error } = useSelector((state: RootState) => state.user)
-
-  useEffect(() => {
-    if (error) {
-      handleError(error)
-    } else {
-      setErrorMessage('')
-    }
-  }, [error, setEmail])
+  const { loading, error, id } = useSelector((state: RootState) => state.user)
 
   const handleError = (error: string) => {
-    if (error === '400') {
-      setErrorMessage('Email ou mot de passe incorrect')
-    } else if (error === '500') {
-      setErrorMessage('Erreur interne, veuillez réessayer plus tard')
+    if (isSignUp) {
+      if (error === '400') {
+        setErrorMessage('Email already exists')
+      } else if (error === '500') {
+        setErrorMessage('Erreur interne, veuillez réessayer plus tard')
+      }
+    } else {
+      if (error === '400') {
+        setErrorMessage('Email ou mot de passe incorrect')
+      } else if (error === '500') {
+        setErrorMessage('Erreur interne, veuillez réessayer plus tard')
+      }
     }
   }
 
@@ -68,6 +69,16 @@ export default function SignForm({
 
     if (!remember) localStorage.removeItem('authToken')
   }
+
+  useEffect(() => {
+    if (error) {
+      handleError(error)
+    } else {
+      setErrorMessage('')
+      setAccountCreatedMessage('Account created, please sign in')
+      toggleSignForm()
+    }
+  }, [error, setEmail, id])
 
   return (
     <>
@@ -173,8 +184,16 @@ export default function SignForm({
                 </>
               ) : (
                 <>
-                  Don’t have an account yet? Create{' '}
-                  <span onClick={toggleSignForm}>here</span>.
+                  {accountCreatedMessage ? (
+                    <span className={'validMessage'}>
+                      {accountCreatedMessage}
+                    </span>
+                  ) : (
+                    <>
+                      Don’t have an account yet? Create{' '}
+                      <span onClick={toggleSignForm}>here</span>.
+                    </>
+                  )}
                 </>
               )}
             </p>

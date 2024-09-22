@@ -1,6 +1,6 @@
 export interface ICreateUserResponse {
   body: {
-    id: string
+    _id: string
     email: string
   }
 }

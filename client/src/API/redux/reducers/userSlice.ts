@@ -36,7 +36,7 @@ export const createUser = createAsyncThunk<
       lastName,
     })
 
-    return { body: { id: res.body.id, email: res.body.email } }
+    return { body: { _id: res.body._id, email: res.body.email } }
   } catch (err) {
     const error = err as { response?: { data?: string }; message?: string }
     const errorMessage =
@@ -112,7 +112,7 @@ const userSlice = createSlice({
         createUser.fulfilled,
         (state, action: PayloadAction<ICreateUserResponse>) => {
           state.loading = false
-          state.id = action.payload.body.id
+          state.id = action.payload.body._id
           state.email = action.payload.body.email
         },
       )

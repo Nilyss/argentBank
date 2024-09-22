@@ -96,8 +96,13 @@
   cursor: pointer;
 }
 
-#signForm .error {
+ .error {
   text-align: center;
   color: crimson;
   margin: 1rem 0;
+}
+
+#signForm .validMessage {
+  cursor: default !important;
+  color: green !important;
 }
