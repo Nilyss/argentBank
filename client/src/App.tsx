@@ -14,6 +14,7 @@ import Footer from './components/footer/Footer'
 // layout
 import LandingPage from './layouts/landingPage/LandingPage'
 import AuthPage from './layouts/authPage/AuthPage'
+import HomePage from './layouts/homePage/HomePage'
 
 function App(): ReactElement {
   return (
@@ -22,6 +23,7 @@ function App(): ReactElement {
       <Routes>
         <Route path={'/'} element={<LandingPage />} />
         <Route path={'/auth'} element={<AuthPage />} />
+        <Route path={'/home'} element={<HomePage />} />
       </Routes>
       <Footer />
     </Router>

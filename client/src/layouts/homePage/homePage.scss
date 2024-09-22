@@ -1,2 +1,11 @@
 @use '../../utils/styles/mixins' as mixins;
 @use '../../utils/styles/variables' as vars;
+
+#homePage {
+  background: vars.$homeBackgroundColor;
+  height: 80vh;
+  color: white;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}

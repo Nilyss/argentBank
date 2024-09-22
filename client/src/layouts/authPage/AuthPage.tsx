@@ -11,7 +11,7 @@ import SignForm from '../../components/signForm/SignForm'
 import { useState } from 'react'
 
 export default function AuthPage(): ReactElement {
-  const [isSignUp, setIsSignUp] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(true)
 
   const toggleSignForm = (): void => {
     setIsSignUp(!isSignUp)

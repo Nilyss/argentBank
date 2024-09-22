@@ -7,14 +7,16 @@ interface ISignFormProps {
   isSignUp: boolean
   toggleSignForm: () => void
 }
-import { RootState, AppDispatch } from '../../API/redux/store/store'
-import { createUser, resetError } from '../../API/redux/reducers/userSlice'
 
 // hooks | libraries
 import { FaUserCircle } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
-import { loginUser } from '../../API/redux/reducers/userSlice.ts'
+import { useNavigate } from 'react-router-dom'
+
+// redux
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState, AppDispatch } from '../../API/redux/store/store'
+import { createUser, resetError, loginUser } from '../../API/redux/reducers/userSlice'
 
 // components
 import Loader from '../loader/Loader'
@@ -30,8 +32,11 @@ export default function SignForm({
   const [remember, setRemember] = useState<boolean>(false)
   const [accountCreatedMessage, setAccountCreatedMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const navigate = useNavigate()
+
   const dispatch: AppDispatch = useDispatch<AppDispatch>()
-  const { loading, error, id } = useSelector((state: RootState) => state.user)
+  const { loading, error, id, isAuthenticated } = useSelector((state: RootState) => state.user)
 
   const handleError = (error: string) => {
     if (isSignUp) {
@@ -79,6 +84,12 @@ export default function SignForm({
       toggleSignForm()
     }
   }, [error, setEmail, id])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home')
+    }
+  }, [isAuthenticated, navigate])
 
   return (
     <>

@@ -1,0 +1,64 @@
+@use '../../utils/styles/mixins' as mixins;
+@use '../../utils/styles/variables' as vars;
+
+#userProfile {
+  margin-top: 1.35em;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#userProfile h2 {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+#userProfile .profileWrapper .profileUserName {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+#userProfile .profileWrapper form .inputWrapper {
+  display: flex;
+  flex-flow: row;
+  gap: 2em;
+}
+
+#userProfile form input[type='text'] {
+  padding: 5px;
+  font-size: 1.2rem;
+}
+
+#userProfile form input[type='text']:focus {
+  outline: #00bc77 solid 2px;
+}
+
+#userProfile form .profileFormBtnWrapper {
+  margin-top: 1em;
+  display: flex;
+  gap: 2em;
+}
+
+#userProfile form .profileFormBtnWrapper button {
+  width: 120px;
+  padding: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #00bc77;
+  border: 2px solid #00bc77;
+  border-radius: 2px;
+  font-size: 0.8em;
+  background: #ffffff;
+}
+
+#userProfile form .profileFormBtnWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#userProfile .editButton {
+  margin-top: 2em;
+  @include mixins.editButton;
+}
