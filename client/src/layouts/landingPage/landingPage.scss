@@ -5,6 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: vars.$mobileBreakpoint) {
+    flex-flow: column;
+  }
 }
 
 #features h2 {

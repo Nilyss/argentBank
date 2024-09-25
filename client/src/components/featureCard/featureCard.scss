@@ -8,6 +8,9 @@
   flex-flow: column;
   align-items: center;
   padding: 2.5rem;
+  @media (max-width: vars.$mobileBreakpoint) {
+    width: 100%;
+  }
 }
 
 #featureCard .iconContainer {

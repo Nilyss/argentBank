@@ -8,6 +8,9 @@
 #banner figure {
   overflow: hidden;
   height: 400px;
+  @media (max-width: vars.$mobileBreakpoint) {
+    height: 300px;
+  }
 }
 
 #banner figure img {
@@ -15,6 +18,9 @@
   height: 100%;
   object-fit: cover;
   object-position: 0 33%;
+  @media (max-width: vars.$mobileBreakpoint) {
+    object-position: 0 -50px;
+  }
 }
 
 #banner article {
@@ -25,6 +31,12 @@
   margin: 2rem;
   padding: 2rem;
   background: #ffffff;
+  @media (max-width: vars.$mobileBreakpoint) {
+    width: 255px;
+    margin: unset;
+    top: 2em;
+    left: 2em;
+  }
 }
 
 #banner article h2 {
@@ -34,10 +46,16 @@
 #banner article li:not(:last-child) {
   font-weight: 700;
   font-size: 1.5rem;
+  @media (max-width: vars.$mobileBreakpoint) {
+    font-size: 1rem;
+  }
 }
 
 #banner article li:last-child {
   font-weight: 400;
   font-size: 1.2rem;
   margin-top: 1em;
+  @media (max-width: vars.$mobileBreakpoint) {
+    font-size: 0.9rem;
+  }
 }

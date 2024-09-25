@@ -17,6 +17,9 @@
 #userProfile .profileWrapper .profileUserName {
   font-size: 2em;
   font-weight: 700;
+  @media (max-width: vars.$mobileBreakpoint) {
+    text-align: center;
+  }
 }
 
 #userProfile .profileWrapper form .inputWrapper {

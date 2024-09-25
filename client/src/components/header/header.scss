@@ -10,6 +10,9 @@ header nav {
 
 header figure {
   width: 200px;
+  @media (max-width: vars.$mobileBreakpoint) {
+    width: 160px;
+  }
 }
 
 header figure img {
@@ -42,4 +45,9 @@ header nav a {
 header .profileBtnWrapper {
   display: flex;
   gap: 1rem;
+  @media (max-width: vars.$mobileBreakpoint) {
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: center;
+  }
 }
