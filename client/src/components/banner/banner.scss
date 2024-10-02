@@ -35,7 +35,8 @@
     width: 255px;
     margin: unset;
     top: 2em;
-    left: 2em;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 

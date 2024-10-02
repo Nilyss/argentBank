@@ -8,8 +8,9 @@
   align-items: center;
   color: vars.$primaryFontColor;
   padding: 1.5rem;
-  width: 100%;
+  width: 82%;
   @media (max-width: vars.$mobileBreakpoint) {
+    align-items: unset;
     flex-flow: column;
     gap: 1em;
   }
@@ -31,4 +32,7 @@
   width: 200px;
   padding: 8px !important;
   @include mixins.editButton;
+  @media (max-width: vars.$mobileBreakpoint) {
+    width: 100%;
+  }
 }

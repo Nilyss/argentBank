@@ -13,12 +13,11 @@
 #homePage .transactionCardContainer {
   margin-top: 2rem;
   width: 100%;
-  padding: 0 12rem;
   display: flex;
+  align-items: center;
   flex-flow: column;
   gap: 2.1rem;
   @media (max-width: vars.$mobileBreakpoint) {
-    padding: 0 2rem;
     margin-bottom: 2rem;
   }
 }
