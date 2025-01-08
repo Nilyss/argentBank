@@ -5,7 +5,7 @@ import './utils/styles/global.scss'
 import { ReactElement } from 'react'
 
 // hooks | libraries
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 // redux
@@ -47,6 +47,7 @@ function App(): ReactElement {
         <Route path={'/'} element={<LandingPage />} />
         <Route path={'/auth'} element={<AuthPage />} />
         <Route path={'/home'} element={<HomePage />} />
+        <Route path={'*'} element={<Navigate to={'/'} />} />
       </Routes>
       <Footer />
     </Router>
