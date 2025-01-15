@@ -4,6 +4,7 @@ export const logger: Middleware = (storeAPI) => (next) => (action) => {
   const result = next(action)
   const state = storeAPI.getState()
 
+  // @ts-ignore
   console.groupCollapsed(action.type)
   console.log('[Logger Middleware] Previous state : ', state)
   console.log('[Logger Middleware] Action : ', action)
